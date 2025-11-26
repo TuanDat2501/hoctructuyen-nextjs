@@ -1,0 +1,697 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+/* General Body & Container Styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #f8f8f8;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+}
+
+/* Top Bar Styles */
+.top-bar {
+    background-color: #ffffff; /* White background */
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #555;
+}
+
+.top-bar .container {
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    gap: 15px; /* Space between flex items */
+}
+
+/* Search Section */
+.search-section {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    flex-grow: 1; /* Allow search to take more space */
+    max-width: 300px; /* Limit max width of search */
+}
+
+.search-section input {
+    border: none;
+    padding: 8px 10px;
+    outline: none;
+    flex-grow: 1;
+}
+
+.search-section .search-btn {
+    background-color: #007bff; /* Blue */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Contact Info */
+.contact-info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center; /* Center on smaller screens */
+}
+
+.contact-info span {
+    display: flex;
+    align-items: center;
+}
+
+.contact-info i {
+    margin-right: 5px;
+    color: #007bff;
+}
+
+/* Auth Buttons */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end; /* Align right */
+}
+
+.auth-buttons .btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.auth-buttons .btn-register {
+    background-color: #007bff; /* Blue */
+    color: white;
+}
+
+.auth-buttons .btn-login {
+    background-color: #0d6efd; /* Slightly darker blue for login */
+    color: white;
+}
+
+/* Main Navigation Styles */
+.main-nav {
+    background-color: #ffffff;
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.main-nav .container {
+    align-items: center;
+}
+
+/* Logo Section */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 50px; /* Adjust as needed */
+    width: auto;
+}
+
+.logo .logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff; /* Blue color for main logo text */
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo .logo-text span {
+    font-size: 12px;
+    font-weight: normal;
+    color: #666;
+}
+
+
+/* Navigation Menu */
+.main-nav nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 25px; /* Space between menu items */
+}
+
+.main-nav nav ul li a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    padding: 10px 0;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between icon and text */
+}
+
+.main-nav nav ul li a:hover {
+    color: #007bff;
+}
+
+.main-nav nav ul li a i.fa-chevron-down {
+    font-size: 10px; /* Smaller arrow icon */
+    margin-left: 3px;
+}
+
+/* Cart Icon */
+.cart-icon {
+    position: relative;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+}
+
+.cart-icon .cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #ffc107; /* Yellow */
+    color: white;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 2px 6px;
+    line-height: 1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .main-nav nav ul {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .contact-info, .auth-buttons {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 10px;
+    }
+
+    .main-nav .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .main-nav nav ul {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .main-nav nav ul li {
+        width: 100%;
+        text-align: center;
+    }
+    .main-nav nav ul li a {
+        justify-content: center;
+    }
+
+    .search-section {
+        width: 100%;
+        max-width: 100%; /* Allow search to take full width */
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-info {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .auth-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+/* --- Course Section Styles --- */
+.course-section {
+    padding: 40px 0;
+    background-color: #e9f5e9; /* Light green background from the image */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1 1"><defs><linearGradient id="g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgb(233, 245, 233);stop-opacity:1"/><stop offset="100%" style="stop-color:rgb(255, 255, 255);stop-opacity:1"/></linearGradient></defs><rect x="0" y="0" width="1" height="1" fill="url(#g)"/></svg>'); /* Gradient effect similar to the image */
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    background-color: #a4e8a4; /* Background for the title */
+    display: inline-block;
+    padding: 10px 40px;
+    margin: 0 auto 30px auto;
+    width: fit-content;
+    border-radius: 5px;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    
+    /* Make the title centered within the parent container */
+    display: block; 
+}
+
+/* Course Grid */
+.course-grid {
+    display: grid;
+    /* 2 columns on large screens, adjust based on your design */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px;
+}
+
+/* Individual Course Card */
+.course-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    display: flex; /* Use flex for image and details side-by-side */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.course-image-wrapper {
+    flex-basis: 40%; /* Image takes 40% width */
+    max-width: 40%;
+    overflow: hidden;
+}
+
+.course-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.course-details {
+    flex-basis: 60%; /* Details take 60% width */
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Metadata (Time, lessons, views) */
+.course-meta {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.course-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.course-meta i {
+    color: #007bff; /* Blue icons */
+}
+
+.course-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+/* Instructor */
+.course-instructor {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+.course-instructor i {
+    margin-right: 5px;
+    color: #333;
+}
+
+/* Price */
+.course-price {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.course-price .old-price {
+    font-size: 16px;
+    color: #999;
+    text-decoration: line-through; /* Strikethrough for old price */
+    font-weight: 400;
+}
+
+.course-price .current-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f04e23; /* Distinct color for current price */
+}
+.course{
+    display: flex;
+    flex-direction: column;
+}
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .course-grid {
+        grid-template-columns: 1fr; /* Stack into a single column on medium screens */
+    }
+
+    .course-card {
+        flex-direction: row; /* Keep side-by-side on tablet/medium screen */
+    }
+}
+
+@media (max-width: 768px) {
+    .course-card {
+        flex-direction: column; /* Stack vertically on small screens/mobile */
+        max-width: 400px; /* Limit size for better viewing */
+        margin: 0 auto;
+    }
+
+    .course-image-wrapper, .course-details {
+        flex-basis: auto;
+        max-width: 100%;
+    }
+
+    .course-image-wrapper img {
+        height: auto; /* Allow image height to adjust */
+    }
+    
+    .section-title {
+        font-size: 24px;
+        padding: 8px 20px;
+    }
+}
+/* --- Syllabus Section Styles --- */
+.syllabus-section {
+    padding: 30px 0;
+    background-color: #ffffff; /* White background */
+}
+
+.syllabus-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f77a33; /* Orange color */
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+
+/* Metadata (Gồm, Thời lượng) */
+.syllabus-meta {
+    display: flex;
+    gap: 30px;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.syllabus-meta span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.syllabus-meta i {
+    color: #333;
+    font-size: 16px;
+}
+
+/* Syllabus List and Items */
+.syllabus-list {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.syllabus-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #fcfcfc;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer; /* Suggests interactivity */
+}
+
+.syllabus-item:last-child {
+    border-bottom: none;
+}
+
+/* Left side (Header) */
+.item-header {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    font-weight: 600;
+    color: #333;
+}
+
+.toggle-icon i {
+    color: #007bff; /* Blue plus icon */
+    font-size: 16px;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+}
+
+/* Nếu bạn muốn hiển thị trạng thái mở, bạn có thể thêm class 'active' */
+/* .syllabus-item.active .toggle-icon i {
+    transform: rotate(45deg);
+} */
+
+.part-name {
+    text-transform: uppercase;
+}
+
+/* Right side (Details) */
+.item-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 15px;
+}
+
+.document-icon i {
+    color: #f77a33; /* Orange color for the document icon */
+    font-size: 20px;
+    background-color: #f77a331a; /* Very light orange background */
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.video-count {
+    font-weight: 600;
+    color: #555;
+    min-width: 60px; /* To align the numbers */
+    text-align: right;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .syllabus-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .item-header {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .item-details {
+        align-self: flex-end; /* Align details to the right */
+    }
+    .syllabus-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+/* --- Footer Styles --- */
+footer {
+    background-color: #1e73be; /* Màu xanh dương chủ đạo */
+    color: #ffffff;
+    padding: 50px 0 20px 0;
+    font-size: 14px;
+}
+
+/* Layout chia cột */
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    gap: 30px;
+}
+
+.footer-col {
+    flex: 1; /* Chia đều độ rộng cho 3 cột */
+    min-width: 250px; /* Đảm bảo không quá nhỏ trên màn hình bé */
+}
+
+/* Tiêu đề cột */
+.footer-col h3 {
+    font-size: 16px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Định dạng danh sách chung */
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start; /* Căn icon thẳng hàng với dòng đầu tiên của text */
+    line-height: 1.5;
+}
+
+.footer-col ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.footer-col ul li a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+/* Icon cột Liên hệ */
+.contact-list i {
+    width: 25px; /* Chiều rộng cố định để text thẳng hàng */
+    margin-top: 3px; /* Căn chỉnh vị trí icon */
+    font-size: 16px;
+}
+
+/* Dấu chấm vuông nhỏ cho cột 2 và 3 */
+.square-dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background-color: #ffffff;
+    margin-right: 15px;
+    margin-top: 8px; /* Căn giữa theo chiều dọc */
+    flex-shrink: 0; /* Ngăn không cho dấu chấm bị co lại */
+}
+
+/* Phần Footer Bottom (Social & Copyright) */
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Đường kẻ mờ ngăn cách */
+    padding-top: 30px;
+}
+
+.social-icons {
+    margin-bottom: 15px;
+}
+
+.social-icons a {
+    color: #ffffff;
+    font-size: 24px; /* Kích thước icon FB, Youtube */
+    margin: 0 10px;
+    text-decoration: none;
+    transition: transform 0.3s;
+    display: inline-block;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2); /* Hiệu ứng phóng to khi di chuột */
+}
+
+.copyright {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Icon trái tim */
+.heart-icon {
+    color: #ff4d4d; /* Màu đỏ */
+    margin: 0 3px;
+    animation: heartbeat 1.5s infinite;
+}
+
+/* Hiệu ứng trái tim đập (tùy chọn thêm cho đẹp) */
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive: Chuyển thành 1 cột trên điện thoại */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: left; /* Hoặc center nếu bạn thích căn giữa trên mobile */
+    }
+    
+    .footer-col {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
