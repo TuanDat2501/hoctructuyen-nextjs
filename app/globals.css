@@ -282,6 +282,7 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     display: flex;
+    min-height: 100vh;
 }
 
 .section-title {
@@ -318,6 +319,8 @@ body {
     overflow: hidden;
     display: flex; /* Use flex for image and details side-by-side */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 200px;
+    cursor: pointer;
 }
 
 .course-card:hover {
@@ -408,6 +411,7 @@ body {
 .course{
     display: flex;
     flex-direction: column;
+    justify-content: unset !important;
 }
 /* Responsive Adjustments */
 @media (max-width: 992px) {
@@ -695,3 +699,4 @@ footer {
         margin-bottom: 20px;
     }
 }
+
