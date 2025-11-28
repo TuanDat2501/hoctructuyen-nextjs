@@ -30,7 +30,7 @@ export const loginUser = createAsyncThunk(
   async (credentials: { username: string; password: string }, thunkAPI) => {
     try {
       const response = await axiosInstance.post('/auth/login', credentials);
-      const data = response; // Vì axios config của mình đã return response.data
+      const data:any = response; // Vì axios config của mình đã return response.data
 
       // Lưu token
       if (typeof window !== 'undefined') {
