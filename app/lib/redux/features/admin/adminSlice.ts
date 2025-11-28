@@ -36,6 +36,19 @@ export const createUser = createAsyncThunk(
     }
   }
 );
+
+export const updateUser = createAsyncThunk(
+  'admin/updateUser',
+  async ({ id, data }: { id: string; data: any }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.put(`/admin/users/${id}`, data);
+      return response; // Trả về user đã update
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Lỗi cập nhật');
+    }
+  }
+);
+
 // ------------------ Slice -------------------
 const adminSlice = createSlice({
   name: 'admin',
@@ -71,6 +84,12 @@ const adminSlice = createSlice({
     builder.addCase(createUser.fulfilled, (state, action) => {
       // Thêm user mới vào ĐẦU danh sách (để Admin thấy ngay)
       state.users.unshift(action.payload);
+    });
+    builder.addCase(updateUser.fulfilled, (state, action:any) => {
+      const index = state.users.findIndex((u: any) => u.id === action.payload.id);
+      if (index !== -1) {
+        state.users[index] = action.payload;
+      }
     });
   },
 });

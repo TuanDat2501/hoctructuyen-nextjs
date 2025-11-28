@@ -114,7 +114,7 @@ export default function LearnComponent() {
         <div className="w-full md:w-1/3 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
            <h3 className="font-bold text-gray-800 mb-4">Thông báo mới</h3>
            <ul className="space-y-3 text-sm text-gray-600">
-              <li className="flex gap-2">
+              {/* <li className="flex gap-2">
                  <span className="w-2 h-2 mt-1.5 rounded-full bg-red-500 shrink-0"></span>
                  Lịch training Revit dời sang thứ 6.
               </li>
@@ -125,7 +125,8 @@ export default function LearnComponent() {
               <li className="flex gap-2">
                  <span className="w-2 h-2 mt-1.5 rounded-full bg-gray-300 shrink-0"></span>
                  Bảo trì hệ thống vào cuối tuần.
-              </li>
+              </li> */}
+              Không có thông báo mới.
            </ul>
         </div>
       </div>

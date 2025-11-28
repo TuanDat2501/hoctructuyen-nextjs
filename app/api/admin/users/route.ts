@@ -16,6 +16,7 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
       select: { // Chỉ lấy trường cần thiết, bỏ password
         id: true,
+        username: true,
         name: true,
         email: true,
         role: true,
@@ -42,7 +43,9 @@ export async function POST(request: Request) {
     if (!email || !username || !password || !name) {
       return NextResponse.json({ message: 'Vui lòng nhập đủ thông tin' }, { status: 400 });
     }
-
+    if (password.length < 6) {
+      return NextResponse.json({ message: 'Mật khẩu quá ngắn (tối thiểu 6 ký tự)' }, { status: 400 });
+    }
     // 2. Check trùng cả Email HOẶC Username
     const existing = await prisma.user.findFirst({
       where: {

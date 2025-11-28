@@ -16,6 +16,9 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+    if (password.length < 6) {
+      return NextResponse.json({ message: 'Mật khẩu quá ngắn (tối thiểu 6 ký tự)' }, { status: 400 });
+    }
     // 2. Kiểm tra Email đã tồn tại chưa
     const existingUser = await prisma.user.findUnique({
       where: { username },

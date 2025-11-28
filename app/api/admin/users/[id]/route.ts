@@ -1,45 +1,69 @@
+import { NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
 import { verifyAdmin } from '@/app/lib/auth-check';
 import { prisma } from '@/app/lib/prisma';
-import { NextResponse } from 'next/server';
 
-
-// 1. Sửa type của params thành Promise
-export async function DELETE(
+export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ id: string }> } 
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  // 1. CHỐT CHẶN: Chỉ Admin mới được vào đây
+  const admin = await verifyAdmin();
+  if (!admin) return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+
   try {
-    // 2. Phải AWAIT params trước khi lấy ID
-    const { id } = await params; 
+    const { id } = await params;
+    const body = await request.json();
+    const { name, email, role, password, username } = body;
 
-    // console.log("Đang xóa user ID:", id); // Bật log này lên để debug
+    // Dữ liệu chuẩn bị update
+    const updateData: any = {
+      name,
+      email,
+      role,
+      // Username chỉ được update ở API này (Admin)
+      username, 
+    };
 
-    // 3. Check quyền Admin
-    const admin = await verifyAdmin();
-    if (!admin) return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+    // 2. CHECK TRÙNG USERNAME (Logic quan trọng)
+    // Nếu admin có gửi username mới lên để sửa
+    if (username) {
+      // Tìm xem có ai KHÁC đang dùng username này không?
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          username: username,
+          NOT: {
+            id: id // Trừ chính thằng user đang được sửa ra
+          }
+        }
+      });
 
-    // 4. Không cho phép tự xóa chính mình
-    if (id === admin.userId) {
-      return NextResponse.json({ message: 'Không thể tự xóa chính mình!' }, { status: 400 });
+      if (existingUser) {
+        return NextResponse.json({ message: 'Username này đã có người sử dụng!' }, { status: 400 });
+      }
     }
 
-    // 5. Xóa user trong DB
-    await prisma.user.delete({
-      where: { id }, // id ở đây là string lấy từ params
+    // 3. Xử lý Mật khẩu (Nếu có nhập thì mới đổi)
+    if (password && password.trim() !== '') {
+      if (password.length < 6) {
+        return NextResponse.json({ message: 'Mật khẩu phải từ 6 ký tự' }, { status: 400 });
+      }
+      updateData.password = await bcrypt.hash(password, 10);
+    }
+
+    // 4. Tiến hành Update
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: updateData,
     });
 
-    return NextResponse.json({ message: 'Xóa thành công' });
+    // Bỏ password trước khi trả về
+    const { password: _, ...userResponse } = updatedUser;
 
-  } catch (error: any) {
-    // IN LỖI CHI TIẾT RA TERMINAL ĐỂ SOI
-    console.error("Lỗi xóa user:", error); 
-    
-    // Kiểm tra xem có phải lỗi do dính khóa ngoại (Foreign Key) không
-    if (error.code === 'P2003') {
-      return NextResponse.json({ message: 'User này đang có dữ liệu liên quan, không thể xóa!' }, { status: 400 });
-    }
+    return NextResponse.json(userResponse);
 
-    
-    return NextResponse.json({ message: 'Lỗi khi xóa user: ' + error.message }, { status: 500 });
+  } catch (error) {
+    console.error("Update Error:", error);
+    return NextResponse.json({ message: 'Lỗi cập nhật user' }, { status: 500 });
   }
 }
