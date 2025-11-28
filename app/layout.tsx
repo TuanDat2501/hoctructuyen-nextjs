@@ -3,7 +3,16 @@ import { Toaster } from 'react-hot-toast';
 import './globals.css';
 import AuthProvider from './lib/component/AuthProvider';
 import StoreProvider from './lib/redux/provider';
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  // Cấu hình Template cho Title
+  title: {
+    template: '%s | Sano Media Academy', // %s sẽ được thay thế bởi title của trang con
+    default: 'Sano Media Academy - Hệ thống đào tạo nội bộ', // Title mặc định cho trang chủ
+  },
+  description: "Nền tảng học tập và phát triển kỹ năng dành riêng cho nhân sự Sano Media.",
+};
 export default function RootLayout({
   children,
 }: {

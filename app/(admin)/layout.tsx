@@ -14,7 +14,6 @@ import AuthGuard from '../lib/component/AuthGuard';
 
 // Import các thứ đã setup trước đó
 
-
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
