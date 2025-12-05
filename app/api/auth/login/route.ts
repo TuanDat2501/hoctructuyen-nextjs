@@ -22,7 +22,12 @@ export async function POST(request: Request) {
     if (!user) {
       return NextResponse.json({ message: 'Username không tồn tại' }, { status: 401 });
     }
-
+    if (user.status === 'pending') {
+      return NextResponse.json({ message: 'Tài khoản đang chờ phê duyệt. Vui lòng liên hệ Admin.' }, { status: 403 });
+    }
+    if (user.status === 'banned') {
+      return NextResponse.json({ message: 'Tài khoản đã bị khóa.' }, { status: 403 });
+    }
     // 3. So sánh mật khẩu (Input vs Database)
     const isPasswordValid = await bcrypt.compare(password, user.password);
 

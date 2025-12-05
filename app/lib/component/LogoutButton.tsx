@@ -6,15 +6,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch } from '../redux/hook';
 import { logout } from '../redux/features/auth/authSlice';
+import { reset } from '../redux/features/course/courseSlice';
+import { useDispatch } from 'react-redux';
+import { resetProgress } from '../redux/features/progress/progressSlice';
 
 export default function LogoutButton() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-
   const handleLogout = () => {
     // 1. Dispatch action logout để xóa state và token
+    // dispatch(reset());
+    // dispatch(resetProgress());
     dispatch(logout());
-
     // 2. Chuyển hướng về trang đăng nhập
     router.push('/login');
     router.refresh(); // Refresh để xóa sạch các cache cũ của Next.js

@@ -7,14 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model UserProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  courseId  String  
+  
+  isCompleted Boolean @default(false)
+  completedAt DateTime? @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
+
 model User {
   id        String   @id @default(cuid())
   username  String   @unique 
   email     String?   
   password  String
   name      String?
+  status    String   @default("pending")
   role      String   @default("user")
   createdAt DateTime @default(now())
+  progress UserProgress[]
 }
 
 model Course {
@@ -26,6 +44,7 @@ model Course {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   sections    Section[]
+  userProgress UserProgress[]
 }
 model Section {
   id        String   @id @default(cuid())
@@ -42,4 +61,5 @@ model Lesson {
   videoId   String   
   sectionId String
   section   Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  userProgress UserProgress[]
 }

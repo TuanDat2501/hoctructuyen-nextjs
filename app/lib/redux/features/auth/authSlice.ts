@@ -125,6 +125,10 @@ const authSlice = createSlice({
           localStorage.removeItem('accessToken');
         }
       });
+    builder.addCase(logout, (state:any) => {
+      state.items = [];
+      state.loading = false;
+    });
   },
 });
 

@@ -42,6 +42,7 @@ export async function POST(request: Request) {
         password: hashedPassword,
         name: name || '', // Nếu không nhập tên thì để rỗng
         role: role || 'user',     // Mặc định là user thường
+        status: 'pending',
       },
     });
 

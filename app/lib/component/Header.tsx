@@ -10,7 +10,6 @@ export default function Header() {
         console.log('Logging out...');
         // 1. Xóa dữ liệu trong Redux và LocalStorage
         dispatch(logout());
-    
         // 2. Chuyển hướng về trang Login
         router.push('/');
         

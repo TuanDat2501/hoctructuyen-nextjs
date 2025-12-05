@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus, faPlay, faCirclePlay, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus, faPlay, faCirclePlay, faVideo,faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 // --- ĐỊNH NGHĨA KIỂU DỮ LIỆU (Giống hệt Prisma trả về) ---
 export type Lesson = {
@@ -22,9 +22,10 @@ interface AccordionProps {
   sections: Section[]; // Nhận vào mảng các chương
   activeLessonId?: string; // ID bài đang học
   onSelectLesson: (lesson: Lesson) => void; // Hàm chọn bài
+  completedLessonIds?: string[];
 }
 
-export default function CourseAccordion({ sections = [], activeLessonId, onSelectLesson }: AccordionProps) {
+export default function CourseAccordion({ sections = [], activeLessonId, onSelectLesson,completedLessonIds = [] }: AccordionProps) {
   // State quản lý việc mở/đóng các chương
   const [openSections, setOpenSections] = useState<string[]>([]);
 
@@ -86,6 +87,7 @@ export default function CourseAccordion({ sections = [], activeLessonId, onSelec
               <div>
                 {section.lessons.map((lesson, lIndex) => {
                   const isActive = lesson.id === activeLessonId;
+                  const isCompleted = completedLessonIds.includes(lesson.id); // Check xem đã học chưa
                   
                   return (
                     <div 
@@ -98,17 +100,23 @@ export default function CourseAccordion({ sections = [], activeLessonId, onSelec
                           : 'border-transparent hover:bg-gray-50'}
                       `}
                     >
-                      {/* Icon Play/Video */}
+                      {/* --- LOGIC ICON --- */}
                       <div className="mt-0.5">
-                        <FontAwesomeIcon 
-                          icon={isActive ? faCirclePlay : faPlay} 
-                          className={`text-xs ${isActive ? 'text-indigo-600' : 'text-gray-400'}`} 
-                        />
+                        {isCompleted ? (
+                          // Nếu xong rồi -> Hiện tích xanh
+                          <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 text-sm" />
+                        ) : isActive ? (
+                          // Nếu đang học -> Hiện Play đậm
+                          <FontAwesomeIcon icon={faCirclePlay} className="text-indigo-600 text-sm" />
+                        ) : (
+                          // Chưa học -> Hiện Play nhạt
+                          <FontAwesomeIcon icon={faPlay} className="text-gray-300 text-xs" />
+                        )}
                       </div>
 
                       {/* Thông tin bài */}
                       <div className="flex flex-col">
-                        <span className={`text-sm font-medium leading-tight ${isActive ? 'text-indigo-700' : 'text-gray-700'}`}>
+                        <span className={`text-sm font-medium leading-tight ${isActive ? 'text-indigo-700' : isCompleted ? 'text-gray-500' : 'text-gray-700'}`}>
                           {index + 1}.{lIndex + 1} {lesson.title}
                         </span>
                         <div className="flex items-center gap-2 mt-1">
@@ -121,13 +129,6 @@ export default function CourseAccordion({ sections = [], activeLessonId, onSelec
                     </div>
                   );
                 })}
-
-                {/* Nếu chương không có bài nào */}
-                {section.lessons.length === 0 && (
-                  <div className="p-3 text-xs text-gray-400 italic pl-8">
-                    Chưa có bài học trong chương này.
-                  </div>
-                )}
               </div>
             )}
           </div>

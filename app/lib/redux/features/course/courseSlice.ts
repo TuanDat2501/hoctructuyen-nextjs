@@ -1,5 +1,6 @@
 import axiosInstance from '@/app/lib/axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { logout } from '../auth/authSlice';
 interface CourseState {
   items: any[]; // <--- Quan trọng: Khai báo đây là mảng chứa 'any' (bất cứ thứ gì)
   loading: boolean;
@@ -57,11 +58,15 @@ export const createCourse = createAsyncThunk(
     }
   }
 );
+
+
 //------------- Course Slice --------------
 const courseSlice = createSlice({
   name: 'courses',
   initialState,
-  reducers: {},
+  reducers: {
+    reset: () => initialState
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCourses.pending, (state) => {
@@ -70,8 +75,11 @@ const courseSlice = createSlice({
       .addCase(fetchCourses.fulfilled, (state, action:any) => {
         state.loading = false;
         if (Array.isArray(action.payload)) {
+          console.log("vào 1");
+          
           state.items = action.payload;
         } else if (action.payload && Array.isArray(action.payload.data)) {
+          console.log("vào 2");
           state.items = action.payload.data;
         } else {
           state.items = [];
@@ -100,7 +108,11 @@ const courseSlice = createSlice({
     builder.addCase(deleteCourse.fulfilled, (state, action) => {
       state.items = state.items.filter((c: any) => c.id !== action.payload);
     });
+    builder.addCase(logout, (state) => {
+      state.items = []; 
+      state.loading = false;
+    });
   },
 });
-
+export const { reset } = courseSlice.actions
 export default courseSlice.reducer;

@@ -14,7 +14,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, email, role, password, username } = body;
+    const { name, email, role, password, username,status } = body;
 
     // Dữ liệu chuẩn bị update
     const updateData: any = {
@@ -23,6 +23,7 @@ export async function PUT(
       role,
       // Username chỉ được update ở API này (Admin)
       username, 
+      status
     };
 
     // 2. CHECK TRÙNG USERNAME (Logic quan trọng)

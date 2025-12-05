@@ -4,6 +4,7 @@ import counterReducer from './features/counter/counterSlice';
 import authReducer from './features/auth/authSlice';
 import adminReducer from './features/admin/adminSlice';
 import courseReducer from './features/course/courseSlice';
+import progressReducer from './features/progress/progressSlice';
 export const makeStore = () => {
   return configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const makeStore = () => {
       auth: authReducer,
       admin: adminReducer,
       courses: courseReducer,
+      progress: progressReducer,
     },
   });
 };
