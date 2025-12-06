@@ -8,7 +8,7 @@ import { fetchProgress, markLessonComplete } from '@/app/lib/redux/features/prog
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleNotch, faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import { MediaPlayer, MediaPlayerInstance, MediaProvider, type MediaPlayerProps, Poster } from '@vidstack/react';
+import { MediaPlayer, MediaPlayerInstance, MediaProvider, Poster } from '@vidstack/react';
 import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
@@ -16,9 +16,6 @@ import { useMediaStore } from '@vidstack/react';
 // Import Redux
 import toast from 'react-hot-toast';
 import CourseAccordion from '@/app/lib/component/CourseAccordion';
-
-/* import dynamic from 'next/dynamic';
-const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false }) as any; */
 
 
 export default function CourseLearningPage() {
@@ -28,7 +25,7 @@ export default function CourseLearningPage() {
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeLesson, setActiveLesson] = useState<any>(null);
-  const [played, setPlayed] = useState(0);
+
   // Lấy state tiến độ từ Redux
   const { completedLessonIds } = useAppSelector((state: any) => state.progress);
   const activeLessonRef = useRef<any>(null);
