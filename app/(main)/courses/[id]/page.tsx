@@ -21,7 +21,6 @@ import CourseAccordion from '@/app/lib/component/CourseAccordion';
 export default function CourseLearningPage() {
   const params = useParams();
   const dispatch = useAppDispatch();
-
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeLesson, setActiveLesson] = useState<any>(null);
