@@ -57,7 +57,8 @@ const adminSlice = createSlice({
       totalUsers: 0, 
       totalAdmins: 0, 
       newUsersThisMonth: 0, 
-      totalCourses: 0 
+      totalCourses: 0,
+      userGrowthChart: [] 
     },
     users: [] as any[], // Danh sách user
     loading: false,

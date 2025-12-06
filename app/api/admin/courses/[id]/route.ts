@@ -53,6 +53,7 @@ export async function PUT(
         thumbnail: body.thumbnail,
         instructor: body.instructor,
         lessons: Number(body.lessons),
+        categoryId: body.categoryId || null,
       },
     });
 

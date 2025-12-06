@@ -31,6 +31,7 @@ export async function POST(request: Request) {
         thumbnail: body.thumbnail,
         lessons: Number(body.lessons||0),
         instructor: body.instructor,
+        categoryId: body.categoryId || null,
       }
     });
     return NextResponse.json(newCourse, { status: 201 });

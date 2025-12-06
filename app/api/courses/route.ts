@@ -27,6 +27,7 @@ export async function GET() {
         id: true,
         title: true,
         thumbnail: true,
+        category: true,
         instructor: true,
         lessons: true, // Tổng số bài học
         // Nếu đã login -> Lấy thêm danh sách bài đã học của user này

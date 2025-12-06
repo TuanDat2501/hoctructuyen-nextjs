@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  courses   Course[] 
+}
+
 model UserProgress {
   id        String   @id @default(cuid())
   userId    String
@@ -45,6 +51,9 @@ model Course {
   updatedAt   DateTime @updatedAt
   sections    Section[]
   userProgress UserProgress[]
+
+  categoryId  String? 
+  category    Category? @relation(fields: [categoryId], references: [id])
 }
 model Section {
   id        String   @id @default(cuid())
