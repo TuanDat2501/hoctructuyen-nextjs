@@ -57,9 +57,9 @@ export default function AuthPage() {
       }
     } else {
       // --- LOGIC ĐĂNG NHẬP ---
-      const resultAction = await dispatch(loginUser({ 
-        username: formData.username, 
-        password: formData.password 
+      const resultAction = await dispatch(loginUser({
+        username: formData.username,
+        password: formData.password
       }));
 
       if (loginUser.fulfilled.match(resultAction)) {
@@ -73,21 +73,20 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      
       {/* --- CỘT TRÁI: ẢNH CÔNG TY (Ẩn trên mobile) --- */}
       <div className="hidden lg:flex w-1/2 bg-indigo-900 relative items-center justify-center overflow-hidden">
         {/* Ảnh nền (Thay link ảnh công ty của bạn vào đây) */}
-        <img 
-          src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop" 
-          alt="Sano Media Office" 
+        <img
+          src="login.webp"
+          alt="Sano Media Office"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
-        
+
         {/* Text đè lên ảnh */}
         <div className="relative z-10 p-12 text-white max-w-xl">
           <h2 className="text-5xl font-bold mb-6">Sano Media Academy</h2>
           <p className="text-lg text-indigo-100 leading-relaxed">
-            Chào mừng bạn đến với chương trình đào tạo nội bộ. 
+            Chào mừng bạn đến với chương trình đào tạo nội bộ.
             Nơi nâng cao kỹ năng, chia sẻ kiến thức và cùng nhau phát triển.
           </p>
         </div>
@@ -96,9 +95,10 @@ export default function AuthPage() {
       {/* --- CỘT PHẢI: FORM --- */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md space-y-8">
-          
+
           {/* Header Mobile (Chỉ hiện khi mất cột ảnh) */}
           <div className="lg:hidden text-center mb-8">
+
             <h1 className="text-3xl font-bold text-indigo-700">Sano Media</h1>
             <p className="text-gray-500 text-sm">Chương trình đào tạo nội bộ</p>
           </div>
@@ -114,7 +114,7 @@ export default function AuthPage() {
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm space-y-4">
-              
+
               {/* Username (Dùng chung) */}
               <div className="relative">
                 <FontAwesomeIcon icon={faUser} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -181,9 +181,9 @@ export default function AuthPage() {
                 className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors shadow-lg"
               >
                 {(loginLoading || loading) ? (
-                   <><FontAwesomeIcon icon={faSpinner} spin className="mr-2"/> Đang xử lý...</> 
+                  <><FontAwesomeIcon icon={faSpinner} spin className="mr-2" /> Đang xử lý...</>
                 ) : (
-                   isRegisterMode ? 'Gửi yêu cầu đăng ký' : 'Đăng nhập'
+                  isRegisterMode ? 'Gửi yêu cầu đăng ký' : 'Đăng nhập'
                 )}
               </button>
             </div>
