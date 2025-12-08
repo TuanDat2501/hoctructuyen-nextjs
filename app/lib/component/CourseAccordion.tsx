@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus, faPlay, faCirclePlay, faVideo,faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus, faPlay, faCirclePlay, faVideo,faCheckCircle, faListCheck } from '@fortawesome/free-solid-svg-icons';
 
 // --- ĐỊNH NGHĨA KIỂU DỮ LIỆU (Giống hệt Prisma trả về) ---
 export type Lesson = {
@@ -120,7 +120,8 @@ export default function CourseAccordion({ sections = [], activeLessonId, onSelec
                           {index + 1}.{lIndex + 1} {lesson.title}
                         </span>
                         <div className="flex items-center gap-2 mt-1">
-                          <FontAwesomeIcon icon={faVideo} className="text-[10px] text-gray-400" />
+                          
+                          <FontAwesomeIcon className="text-[10px] text-gray-400" icon={lesson.type === 'QUIZ' ? faListCheck : faVideo} />
                           <span className="text-xs text-gray-500">
                             {lesson.duration || '00:00'}
                           </span>

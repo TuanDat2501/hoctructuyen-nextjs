@@ -16,6 +16,7 @@ export async function POST(request: Request) {
         videoId: body.videoId,
         sectionId: body.sectionId,
         poster: body.poster || null,
+        type:body.type || 'VIDEO'
       }
     });
     const section = await prisma.section.findUnique({
