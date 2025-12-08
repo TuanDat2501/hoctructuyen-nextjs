@@ -16,7 +16,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
                 title: body.title,
                 duration: body.duration,
                 videoId: body.videoId,
+                poster: body.poster,
                 // Không update sectionId để tránh bài học nhảy lung tung
+                type:body.type
             },
         });
         return NextResponse.json(updatedLesson);

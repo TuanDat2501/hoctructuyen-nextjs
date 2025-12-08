@@ -45,3 +45,5 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
+
+export const isCancel = axios.isCancel;

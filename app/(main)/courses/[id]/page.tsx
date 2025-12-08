@@ -1,21 +1,21 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { use, useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/app/lib/redux/hook';
-import axiosInstance from '@/app/lib/axios';
+import axiosInstance, { isCancel } from '@/app/lib/axios';
 import { fetchProgress, markLessonComplete } from '@/app/lib/redux/features/progress/progressSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleNotch, faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import { MediaPlayer, MediaPlayerInstance, MediaProvider, Poster } from '@vidstack/react';
+import { isYouTubeProvider, MediaDestroyEvent, MediaPlayer, MediaPlayerInstance, MediaProvider, Poster, type MediaProviderAdapter, type YouTubeProvider } from '@vidstack/react';
 import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
 import { useMediaStore } from '@vidstack/react';
-// Import Redux
 import toast from 'react-hot-toast';
 import CourseAccordion from '@/app/lib/component/CourseAccordion';
+import QuizPlayer from '@/app/lib/component/QuizPlayer';
 
 
 export default function CourseLearningPage() {
@@ -24,23 +24,27 @@ export default function CourseLearningPage() {
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeLesson, setActiveLesson] = useState<any>(null);
-
-  // Lấy state tiến độ từ Redux
+  const isMountedRef = useRef(true);
   const { completedLessonIds } = useAppSelector((state: any) => state.progress);
   const activeLessonRef = useRef<any>(null);
+  const playerRef = useRef<MediaPlayerInstance>(null);
+  const mediaStore = useMediaStore(playerRef);
 
   useEffect(() => {
     activeLessonRef.current = activeLesson;
   }, [activeLesson]);
   // 1. Load Course Detail
+
+
   useEffect(() => {
+    isMountedRef.current = true;
     const controller = new AbortController();
     const fetchCourseDetail = async () => {
       try {
         setLoading(true);
         const data = await axiosInstance.get(`/courses/${params.id}`, {
-          signal: controller.signal 
-        });
+          signal: controller.signal
+        }) as any;
 
         // Nếu component đã bị hủy (unmounted) thì không set state nữa để tránh lỗi
         if (controller.signal.aborted) return;
@@ -54,6 +58,11 @@ export default function CourseLearningPage() {
         dispatch(fetchProgress(data.id));
 
       } catch (error) {
+        // 3. BẮT LỖI ABORT ĐỂ KHÔNG BÁO ĐỎ
+        if (isCancel(error) || error.name === 'CanceledError' || error.name === 'AbortError' || error.code === 'ERR_CANCELED') {
+          // Đây là lỗi do mình tự hủy -> Bỏ qua, không làm gì cả
+          return;
+        }
         console.error("Lỗi tải khóa học", error);
       } finally {
         setLoading(false);
@@ -64,7 +73,12 @@ export default function CourseLearningPage() {
       fetchCourseDetail();
     }
     return () => {
+
       controller.abort(); // Ra lệnh hủy request đang chạy dở
+      // Khi component unmount (chuyển trang/back):
+      isMountedRef.current = false;
+
+
     };
   }, [params.id, dispatch]);
 
@@ -89,13 +103,11 @@ export default function CourseLearningPage() {
     hasMarkedRef.current = false;
   }, [activeLesson]);
 
-  const playerRef = useRef<MediaPlayerInstance>(null);
-  const mediaStore = useMediaStore(playerRef);
-  const currentTime = mediaStore?.currentTime || 0;
-  const duration = mediaStore?.duration || 0;
-
   // Khi thời gian video thay đổi
   const handleTimeUpdate = () => {
+    if (!isMountedRef.current) return;
+    const currentTime = mediaStore?.currentTime || 0;
+    const duration = mediaStore?.duration || 0;
     const percent = currentTime / duration; // 0 -> 1    
     const isCompleted = completedLessonIds.includes(activeLesson?.id);
 
@@ -107,6 +119,7 @@ export default function CourseLearningPage() {
 
   // Khi video kết thúc
   const handleEnd = () => {
+    if (!isMountedRef.current) return;
     handleMarkCompleted();
     // Có thể thêm logic tự chuyển bài ở đây: nextLesson()
   };
@@ -129,15 +142,22 @@ export default function CourseLearningPage() {
           </h1>
         </div>
         <div className="flex flex-1 flex-col lg:flex-row">
+
+          {/* ------------------------- */}
           {/* CỘT TRÁI: VIDEO & CONTROLS */}
           <div className="flex-1 bg-black flex flex-col relative">
             {/* Video Player */}
-            <div className="w-full aspect-video bg-black relative shadow-lg shrink-0">
+            {/* <div className="w-full aspect-video bg-black relative shadow-lg shrink-0">
               {activeLesson && activeLesson.videoId ? (
                 <MediaPlayer
-
+                  key={activeLesson.id}
                   ref={playerRef}
                   title={activeLesson.title}
+
+                  onDestroy={(nativeEvent: MediaDestroyEvent) => {
+                    nativeEvent.target.destroy();
+                    console.log("MediaPlayer destroyed");
+                  }}
                   // Vidstack tự hiểu link Youtube
                   src={`youtube/${activeLesson.videoId}`}
 
@@ -145,15 +165,16 @@ export default function CourseLearningPage() {
                   onTimeUpdate={handleTimeUpdate}
                   onEnd={handleEnd}
                 >
-                  <MediaProvider >
+                  <MediaProvider>
+
                     <Poster
                       className="vds-poster w-full h-full object-cover"
-                      src={course.thumbnail || undefined} // Link ảnh lấy từ khóa học hoặc bài học
+                      src={activeLesson?.poster || course.thumbnail} // Link ảnh lấy từ khóa học hoặc bài học
                       alt={activeLesson.title}
                     />
-
                   </MediaProvider>
-                  {/* Giao diện Youtube like mặc định của thư viện */}
+
+                
                   <DefaultVideoLayout icons={defaultLayoutIcons} />
                 </MediaPlayer>
               ) : (
@@ -161,8 +182,69 @@ export default function CourseLearningPage() {
                   Chọn bài học để bắt đầu
                 </div>
               )}
-            </div>
+            </div> */}
+
+            {activeLesson ? (
+              activeLesson.type === 'QUIZ' ? (
+                // --- TRƯỜNG HỢP QUIZ ---
+                <div className="w-full h-full bg-gray-100 relative shadow-lg shrink-0 overflow-hidden">
+                  <QuizPlayer
+                    key={activeLesson.id}
+                    lessonId={activeLesson.id}
+                    courseId={course.id}
+                    title={activeLesson.title}
+                  />
+                </div>
+              ) : (
+                // --- TRƯỜNG HỢP VIDEO (Cũ) ---
+                <div className="w-full aspect-video bg-black relative shadow-lg shrink-0 overflow-hidden">
+                  <MediaPlayer
+                    key={activeLesson.id}
+                    ref={playerRef}
+                    title={activeLesson.title}
+
+                    onDestroy={(nativeEvent: MediaDestroyEvent) => {
+                      nativeEvent.target.destroy();
+                      console.log("MediaPlayer destroyed");
+                    }}
+                    // Vidstack tự hiểu link Youtube
+                    src={`youtube/${activeLesson.videoId}`}
+
+                    // BẮT EVENT Ở ĐÂY (Rất trực quan)
+                    onTimeUpdate={handleTimeUpdate}
+                    onEnd={handleEnd}
+                  >
+                    <MediaProvider>
+
+                      <Poster
+                        className="vds-poster w-full h-full object-cover"
+                        src={activeLesson?.poster || course.thumbnail} // Link ảnh lấy từ khóa học hoặc bài học
+                        alt={activeLesson.title}
+                      />
+                    </MediaProvider>
+
+
+                    <DefaultVideoLayout icons={defaultLayoutIcons} />
+                  </MediaPlayer>
+                </div>
+              )
+            ) : (
+              <div className="w-full aspect-video bg-black flex items-center justify-center">
+                <p className="text-white">Chọn bài học để bắt đầu</p>
+              </div>
+            )}
+
+            {/* Chỉ hiện Action Bar và Comment khi là VIDEO (Quiz có giao diện riêng rồi) */}
+            {/* {activeLesson && activeLesson.type !== 'QUIZ' && (
+              <>
+                <div className="p-4 bg-white border-b ...">...</div>
+                <div className="p-6 ...">...</div>
+              </>
+            )} */}
+
           </div>
+          {/* ------------------------------------- */}
+
 
           {/* CỘT PHẢI: LIST BÀI HỌC */}
           <div className="w-full lg:w-96 bg-white border-l border-gray-200 overflow-y-auto shrink-0 flex flex-col h-full">
@@ -206,22 +288,26 @@ export default function CourseLearningPage() {
                 </div>
 
                 {/* --- NÚT HOÀN THÀNH --- */}
-                <button
-                  onClick={handleMarkCompleted}
-                  disabled={isLessonCompleted} // Nếu xong rồi thì disable nút
-                  className={`
+                {
+                  activeLesson.type === "VIDEO" && (
+                    <button
+                      onClick={handleMarkCompleted}
+                      disabled={isLessonCompleted} // Nếu xong rồi thì disable nút
+                      className={`
                  px-6 py-2 rounded-full font-bold flex items-center gap-2 transition-all shadow-sm
                  ${isLessonCompleted
-                      ? 'bg-green-100 text-green-700 cursor-default'
-                      : 'bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95'}
+                          ? 'bg-green-100 text-green-700 cursor-default'
+                          : 'bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95'}
                `}
-                >
-                  {isLessonCompleted ? (
-                    <><FontAwesomeIcon icon={faCheck} /> Đã hoàn thành</>
-                  ) : (
-                    <>Đánh dấu hoàn thành</>
-                  )}
-                </button>
+                    >
+                      {isLessonCompleted ? (
+                        <><FontAwesomeIcon icon={faCheck} /> Đã hoàn thành</>
+                      ) : (
+                        <>Đánh dấu hoàn thành</>
+                      )}
+                    </button>
+                  )
+                }
               </div>
 
               {/* Description (Optional) */}

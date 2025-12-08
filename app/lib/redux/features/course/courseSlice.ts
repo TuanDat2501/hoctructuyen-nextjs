@@ -75,11 +75,10 @@ const courseSlice = createSlice({
       .addCase(fetchCourses.fulfilled, (state, action:any) => {
         state.loading = false;
         if (Array.isArray(action.payload)) {
-          console.log("vào 1");
+
           
           state.items = action.payload;
         } else if (action.payload && Array.isArray(action.payload.data)) {
-          console.log("vào 2");
           state.items = action.payload.data;
         } else {
           state.items = [];
