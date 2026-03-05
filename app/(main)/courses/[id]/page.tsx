@@ -198,7 +198,7 @@ export default function CourseLearningPage() {
               ) : (
                 // --- TRƯỜNG HỢP VIDEO (Cũ) ---
                 <div className="w-full aspect-video bg-black relative shadow-lg shrink-0 overflow-hidden">
-                  <MediaPlayer
+                  {/* <MediaPlayer
                     key={activeLesson.id}
                     ref={playerRef}
                     title={activeLesson.title}
@@ -208,7 +208,7 @@ export default function CourseLearningPage() {
                       console.log("MediaPlayer destroyed");
                     }}
                     // Vidstack tự hiểu link Youtube
-                    src={`youtube/${activeLesson.videoId}`}
+                    src={`https://www.youtube.com/watch?v=xOmLxNyXc6o`}
 
                     // BẮT EVENT Ở ĐÂY (Rất trực quan)
                     onTimeUpdate={handleTimeUpdate}
@@ -222,10 +222,9 @@ export default function CourseLearningPage() {
                         alt={activeLesson.title}
                       />
                     </MediaProvider>
-
-
                     <DefaultVideoLayout icons={defaultLayoutIcons} />
-                  </MediaPlayer>
+                  </MediaPlayer> */}
+                  <iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${activeLesson.videoId}?si=ivnvtkWYQ2xC0Gp-`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               )
             ) : (

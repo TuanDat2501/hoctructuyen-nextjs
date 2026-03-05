@@ -63,11 +63,11 @@ export default function CourseViewerPage() {
              <iframe 
                 className="absolute top-0 left-0 w-full h-full"
                 src={`https://www.youtube.com/embed/${activeLesson.videoId}?autoplay=1?modestbranding=1&rel=0&iv_load_policy=3&showinfo=0`} 
-                
                 title="YouTube video player" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowFullScreen
              ></iframe>
+             
           </div>
 
           {/* Thông tin bài học bên dưới video */}
